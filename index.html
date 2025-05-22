@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Interview Prep</title>
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --background-color: #f8f9fa;
+      --text-color: #2c3e50;
+      --card-bg: #ffffff;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 3rem;
+      font-size: 2.5rem;
+    }
+
+    .category-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      margin-bottom: 2rem;
+      padding: 2rem;
+      transition: transform 0.2s ease;
+    }
+
+    .category-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-title {
+      color: var(--secondary-color);
+      margin-top: 0;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--secondary-color);
+      font-size: 1.5rem;
+    }
+
+    .questions-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .question-item {
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.2s ease;
+    }
+
+    .completed-cont {
+      background-color: rgb(142, 223, 122);
+    }
+
+    .question-item:hover {
+      background-color: rgba(52, 152, 219, 0.05);
+    }
+
+    .question-checkbox {
+      width: 20px;
+      height: 20px;
+      margin-right: 1rem;
+      accent-color: var(--secondary-color);
+      flex-shrink: 0;
+    }
+
+    .question-text {
+      flex-grow: 1;
+      margin: 0;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      .category-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Database Interview Preparation</h1>
+    <div id="categoriesContainer"></div>
+  </div>
+
+  <script>
+    const categories = [
+      {
+        title: '🍃 MongoDB Basics',
+        startId: 1,
+        questions: [
+          "What is MongoDB?",
+          "What are the advantages of using MongoDB?",
+          "What is a document in MongoDB?",
+          "What is a collection in MongoDB?",
+          "What is BSON?",
+          "How is MongoDB different from SQL databases?",
+          "What is the default port of MongoDB?",
+          "Explain CRUD operations in MongoDB.",
+          "What is a schema-less database?",
+          "How do you connect to MongoDB using Mongoose?"
+        ]
+      },
+      {
+        title: '🔄 MongoDB Querying & Operators',
+        startId: 11,
+        questions: [
+          "How do you perform a find operation in MongoDB?",
+          "What is the difference between find and findOne?",
+          "How do you use projection in MongoDB?",
+          "What are query operators in MongoDB?",
+          "How does `$in` work in MongoDB?",
+          "What is `$regex` used for?",
+          "How do you sort query results in MongoDB?",
+          "What is pagination and how do you implement it in MongoDB?",
+          "How does `$and`, `$or`, `$nor`, and `$not` work?",
+          "How do you query nested documents in MongoDB?"
+        ]
+      },
+      {
+        title: '🛠️ MongoDB Updates & Indexing',
+        startId: 21,
+        questions: [
+          "What is the difference between updateOne and updateMany?",
+          "What is the `$set` operator used for?",
+          "How do you delete documents in MongoDB?",
+          "What is an index in MongoDB?",
+          "How do you create indexes in MongoDB?",
+          "What is the impact of indexing on performance?",
+          "What are compound indexes?",
+          "What is a unique index?",
+          "How do you drop an index?",
+          "How do you check the indexes of a collection?"
+        ]
+      },
+      {
+        title: '⚙️ Aggregation & Pipelines',
+        startId: 31,
+        questions: [
+          "What is the aggregation framework in MongoDB?",
+          "What are the stages in an aggregation pipeline?",
+          "How does `$match` work in aggregation?",
+          "What does `$group` do in aggregation?",
+          "How do you perform `$lookup` (joins) in MongoDB?",
+          "What is `$project` used for?",
+          "How do you use `$sort`, `$limit`, and `$skip` in pipelines?",
+          "What are common use cases for aggregation?",
+          "How does `$unwind` work?",
+          "What is `$facet` and how is it used?"
+        ]
+      },
+      {
+        title: '🧱 MongoDB Schema Design & Modeling',
+        startId: 41,
+        questions: [
+          "What is schema design in MongoDB?",
+          "What is data embedding and when to use it?",
+          "What is data referencing and when to use it?",
+          "Compare embedding vs referencing.",
+          "How do you model one-to-many relationships in MongoDB?",
+          "How do you model many-to-many relationships?",
+          "What is data denormalization?",
+          "What are the trade-offs in NoSQL schema design?",
+          "How do you ensure data consistency in MongoDB?",
+          "How do you model hierarchical data in MongoDB?"
+        ]
+      },
+      {
+        title: '🔐 MongoDB Security',
+        startId: 51,
+        questions: [
+          "How does MongoDB handle authentication?",
+          "What is role-based access control (RBAC)?",
+          "How do you secure a MongoDB database?",
+          "How do you encrypt data in MongoDB?",
+          "What are best practices for securing MongoDB in production?",
+          "What is IP whitelisting in MongoDB Atlas?",
+          "What is SCRAM in MongoDB authentication?",
+          "How to create users and roles in MongoDB?",
+          "How do you restrict database access to certain users?",
+          "What are common vulnerabilities in MongoDB and how to prevent them?"
+        ]
+      },
+      {
+        title: '📦 MongoDB Transactions & Replication',
+        startId: 61,
+        questions: [
+          "What are transactions in MongoDB?",
+          "How do transactions work across collections?",
+          "What is a replica set in MongoDB?",
+          "What is the role of a primary and secondary in replication?",
+          "What is write concern?",
+          "How do you perform a failover in a replica set?",
+          "What is read concern in MongoDB?",
+          "What is journaling?",
+          "What is the oplog in MongoDB?",
+          "How to check replication status?"
+        ]
+      },
+      {
+        title: '🧠 General Database Concepts',
+        startId: 71,
+        questions: [
+          "What is a database?",
+          "What are the different types of databases?",
+          "Compare SQL vs NoSQL databases.",
+          "What is normalization and why is it important?",
+          "What are the normal forms in database design?",
+          "What is denormalization?",
+          "What is ACID in databases?",
+          "What is CAP theorem?",
+          "What is indexing and how does it improve performance?",
+          "What are primary keys and foreign keys?"
+        ]
+      },
+      {
+        title: '🧠 SQL Concepts & Joins',
+        startId: 81,
+        questions: [
+          "What is a SQL join?",
+          "Explain INNER JOIN with an example.",
+          "What is LEFT JOIN and how is it different from RIGHT JOIN?",
+          "What is a FULL OUTER JOIN?",
+          "What is a SELF JOIN?",
+          "What is a CROSS JOIN?",
+          "What is the difference between UNION and JOIN?",
+          "What are aggregate functions in SQL?",
+          "What are GROUP BY and HAVING clauses?",
+          "What is a subquery in SQL?"
+        ]
+      },
+      {
+        title: '🔐 SQL Constraints & Optimization',
+        startId: 91,
+        questions: [
+          "What is a NOT NULL constraint?",
+          "What is a UNIQUE constraint?",
+          "What is a CHECK constraint?",
+          "What is a FOREIGN KEY constraint?",
+          "What is a DEFAULT constraint?",
+          "How do you create indexes in SQL?",
+          "What are views in SQL?",
+          "What are stored procedures and functions?",
+          "What is a trigger in SQL?",
+          "How do you optimize a slow SQL query?"
+        ]
+      },
+      {
+        title: '🧪 Practical Tasks – MongoDB + SQL',
+        startId: 101,
+        questions: [
+          "Write a MongoDB query to find all users who have not logged in in the past 30 days.",
+          "Write a MongoDB aggregation to calculate total sales per product.",
+          "Write a SQL query to find duplicate email addresses in a users table.",
+          "Write a SQL query to find the second highest salary.",
+          "Write a MongoDB update query to increment a field by 1.",
+          "Create a MongoDB index on multiple fields and explain the use case.",
+          "Write a SQL query to fetch department-wise highest salaries.",
+          "Perform a MongoDB `$lookup` to join users and orders collections.",
+          "Write a SQL query using JOINs to get all employees and their managers.",
+          "Write a SQL query to delete all rows where the name is NULL."
+        ]
+      }
+    ];
+
+    let state = JSON.parse(localStorage.getItem('databaseQuestionsState')) || {};
+
+    function renderCategories() {
+      const container = document.getElementById('categoriesContainer');
+      container.innerHTML = '';
+
+      categories.forEach(category => {
+        const card = document.createElement('div');
+        card.className = 'category-card';
+
+        const title = document.createElement('h2');
+        title.className = 'category-title';
+        title.textContent = category.title;
+
+        const list = document.createElement('ul');
+        list.className = 'questions-list';
+
+        category.questions.forEach((question, index) => {
+          const id = category.startId + index;
+          const idStr = String(id);
+
+          const listItem = document.createElement('li');
+          listItem.className = 'question-item';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.className = 'question-checkbox';
+          checkbox.checked = state[idStr] || false;
+
+          const questionText = document.createElement('span');
+          questionText.className = `question-text ${checkbox.checked ? 'completed' : ''}`;
+          questionText.textContent = `${id}. ${question}`;
+          listItem.className = checkbox.checked ? 'question-item completed-cont' : 'question-item';
+
+          checkbox.addEventListener('change', () => {
+            state[idStr] = checkbox.checked;
+            localStorage.setItem('databaseQuestionsState', JSON.stringify(state));
+            questionText.classList.toggle('completed', checkbox.checked);
+            listItem.className = checkbox.checked ? 'question-item completed-cont' : 'question-item';
+          });
+
+          listItem.appendChild(checkbox);
+          listItem.appendChild(questionText);
+          list.appendChild(listItem);
+        });
+
+        card.appendChild(title);
+        card.appendChild(list);
+        container.appendChild(card);
+      });
+    }
+    renderCategories();
+  </script>
+</body>
+
+</html>
